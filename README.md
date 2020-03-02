@@ -1,16 +1,12 @@
 # Amazon Sagemaker Inference Client Application:
-This application provides visual bounding boxes and text output of a user provided image 
-submitted against an Amazon Sagemaker object-detection model inference endpoint.
+This application provides visual bounding boxes and text output of a user provided image submitted against an Amazon Sagemaker object-detection model inference endpoint.
 
-The application consists of a web client that accepts and submits images to an Amazon 
-Sagemaker Object Detection Inference Endpoint (via an Amazon API Gateway and AWS Lambda) and visualizes the bounding box predictions against a configurable confidence threshold. 
+The application consists of a web client that accepts and submits images to an Amazon Sagemaker Object Detection Inference Endpoint (via an Amazon API Gateway and AWS Lambda) and visualizes the bounding box predictions against a configurable confidence threshold. 
 
 The main use is to provide a demo application that integrates with Amazon Sagemaker 
-object-detection inference endpoint but has also proven to be a useful tool to quickly 
-visualize and validate when developing and optimising Amazon Sagemaker Object Detection models.
+object-detection inference endpoint but has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker Object Detection models.
 
-The application consists of a frontend (Native JS Bootstrap4 Web UI) and a backend AWS 
-NodeJS AWS Lambda and Amazon API Gateway. The required hosting and AWS services are best managed and deployed via AWS Amplify although you are free to deploy the source manually or with any other automation engines. A detailed description of deploying with AWS Amplify is provided in the Deployment section below. 
+The application consists of a frontend (Native JS Bootstrap4 Web UI) and a backend NodeJS AWS Lambda and Amazon API Gateway. The required hosting and AWS services are best managed and deployed via AWS Amplify although you are free to deploy the source manually or with any other automation engines. A detailed description of deploying with AWS Amplify is provided in the Deployment section below. 
  
 ## Overview:
 The code presented here is intended to be managed and maintained by AWS Amplify which automates the provisioning and deployment of hosting infrastructure for web and mobile applications. This repository consists of a front-end native JS web application, a series of backend services and a public API gateway. 
@@ -84,7 +80,6 @@ https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
 * Do you want to use an AWS profile? **Yes**
 * Please choose the profile you want to use: ***[Choose the profile you want for the desired AWS Account]***
 
-
 #### Add Amplify S3 / CloudFront public hosting
 `amplify add hosting`  
 
@@ -106,7 +101,6 @@ Current Environment: [Your Environment]
 | Hosting  | S3AndCloudFront | Create    | awscloudformation |
 
 * Are you sure you want to continue? **Yes**
-
 
 #### Create the backend API and serverless function
 `amplify add api`  
@@ -133,6 +127,58 @@ Successfully added resource smInferenceClient locally
 In the previous step, AWS Amplify defined a skeleton Lambda function witgh placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code.  
 `cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/`
 
+
+
+#### Update Lambda Function Role to Allow Sagemaker InvokeEndpoint Permissions.
+
+AWS Amplify creates an AWS CloudFormatiom template for every object deployed. The Lambda function template is at:
+amplify/function/awsamplifysagemaker/awsamplifysagemaker-cloudformation-template.json
+
+In this template just after the **LambdaExecutionRole** object and just above the **lambdaexecutionpolicy** object add the below text:
+
+```
+    "lambdasagemakeraccesspolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "lambda-sagemaker-invoke-endpoint",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "sagemaker:InvokeEndpoint"
+              ],
+              "Resource": {
+                "Fn::Sub": [
+                  "arn:aws:sagemaker:${region}:${account}:endpoint/*",
+                  {
+                    "region": {
+                      "Ref": "AWS::Region"
+                    },
+                    "account": {
+                      "Ref": "AWS::AccountId"
+                    }
+                  }
+                ]
+              }
+            }
+          ]
+        }
+      }
+    },
+    ```
+
+This will add a new policy to the Lambda execution role that permits Amazon Sagemaker InvokeEndpoint permissions.
+
 #### Deploy the Project to AWS Cloud:
 `amplify push`  
 
@@ -149,3 +195,5 @@ TBA
 ## Copyright and License
 
 TBA
+
+
