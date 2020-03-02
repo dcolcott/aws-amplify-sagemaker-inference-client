@@ -33,9 +33,10 @@ let thresholdLabel = document.getElementById("threshold-range-label");
 let regionSelect = document.getElementById("region-select");
 
 let butAClassInput = document.getElementById("add-class-input");
-butAClassInput.addEventListener('change', addClassInput, false);
+butAClassInput.addEventListener('click', addClassInput, false);
+
 let butRemoveClassInput = document.getElementById("remove-class-input");
-butRemoveClassInput.addEventListener('change', removeClassInput, false);
+butRemoveClassInput.addEventListener('click', removeClassInput, false);
 
 // lastSelected image holds src as base64 of selected image before any processing.
 let lastSelectedImage = new Image();
@@ -60,8 +61,10 @@ function imageSelected() {
     lastSelectedImage.src = this.result;
     imgTarget.src = this.result;
     imageFileLabel.innerHTML = imageFileSelect.files[0].name;
+    inferenceText.innerHTML = `Image Selected: ${imageFileSelect.files[0].name}`;
 
     scaleImageSize();
+
 
     // Reset any previous predictions
     predictions = [];
@@ -97,7 +100,8 @@ async function submitInference() {
     let epName = endpointName.value.replace(/ /g, '');
 
     // Update the text output div
-    inferenceText.innerHTML = `Sagemaker Endpoint: ${epName}<br />`;
+    inferenceText.innerHTML = `Image Selected: ${imageFileSelect.files[0].name}<br />`;
+    inferenceText.innerHTML += `Sagemaker Endpoint: ${epName}<br />`;
 
     // Get the inference classes the user entered into a list.
     classMap = [];
@@ -239,7 +243,6 @@ function thresholdUpdate() {
 //===============================================
 // Add / remove to Inference Class list inputs.
 function addClassInput() {
-
   if (classCnt >= 9) {
     alert('Reached maximum supported inference classes');
     return;
