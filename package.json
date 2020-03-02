@@ -1,0 +1,36 @@
+{
+  "name": "sagemaker-inference-client",
+  "version": "1.0.0",
+  "description": "JS client side application to submit images against a Amazon Sagemaker Object Detection Inference Endpoint.",
+  "scripts": {
+    "start": "webpack && webpack-dev-server --mode development",
+    "build": "webpack"
+  },
+  "license": "MIT",
+  "author": "Dean Colcott: https://www.linkedin.com/in/deancolcott",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/dcolcott/aws-amplify-sagemaker-inference-client"
+  },
+  "dependencies": {
+    "@aws-amplify/api": "latest",
+    "@aws-amplify/pubsub": "latest",
+    "aws-amplify": "^2.2.0",
+    "aws-serverless-express": "^3.3.6"
+  },
+  "devDependencies": {
+    "webpack": "^4.17.1",
+    "webpack-cli": "^3.1.0",
+    "copy-webpack-plugin": "^4.5.2",
+    "webpack-dev-server": "^3.1.5"
+  },
+  "keywords": [
+    "Amazon",
+    "AWS",
+    "Sagemaker",
+    "Inference",
+    "Endpoint",
+    "Object Detection Inference Client",
+    "Amplify"
+  ]
+}
