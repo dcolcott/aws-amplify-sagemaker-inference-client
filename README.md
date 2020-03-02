@@ -72,7 +72,7 @@ Fork this GIT repo from: https://github.com/dcolcott/aws-amplify-sagemaker-infer
 * Choose the type of app that you're building: **javascript**
 * Please tell us about your project
   * What javascript framework are you using: **none**
-  * Source Directory Path: **app** << **Note:** *This is not the default option, needs to be updated*
+  * Source Directory Path: **app**      << **Note:** *This is not the default option, needs to be updated*
   * Distribution Directory Path: **dist**  
   * Build Command:  **npm run-script build**
   * Start Command: **npm run-script start**
@@ -121,16 +121,16 @@ Current Environment: [Your Environment]
 * Provide a friendly name for your resource to be used as a label for this category in the project: **awsamplifysagemaker**
 * Provide the AWS Lambda function name: **awsamplifysagemaker**
 * Choose the function template that you want to use: **Serverless express function (Integration with Amazon API Gateway)**
-* Do you want to access other resources created in this project from your Lambda function? **No**
-* Do you want to edit the local lambda function now? **No**
-Successfully added the Lambda function locally
+* Do you want to access other resources created in this project from your Lambda function? **No**  
+* Do you want to edit the local lambda function now? **No**  
+Successfully added the Lambda function locally  
 * Restrict API access: **No**
 * Do you want to add another path? **No**
 
 Successfully added resource smInferenceClient locally
 
 #### Copy lambda code to amplify backend function ```src``` directory
-In the previous step, AWS Amplify defined a skeleton Lambda function witgh placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code. 
+In the previous step, AWS Amplify defined a skeleton Lambda function witgh placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code.  
 `cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/`
 
 #### Deploy the Project to AWS Cloud:
