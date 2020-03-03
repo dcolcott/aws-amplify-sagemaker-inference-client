@@ -175,7 +175,7 @@ In this template just after the **LambdaExecutionRole** object and just above th
         }
       }
     },
-    ```
+```
 
 This will add a new policy to the Lambda execution role that permits Amazon Sagemaker InvokeEndpoint permissions.
 
