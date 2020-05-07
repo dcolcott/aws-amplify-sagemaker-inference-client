@@ -1,4 +1,4 @@
-# Amazon Sagemaker Inference Endpoint Client Application
+# Amazon Sagemaker Inference Endpoint Client Application.
 
 ![Application Screen Shot](images/app-screenshot.png)
 
@@ -8,20 +8,20 @@ Once trained, the machine learning model needs to be hosted and exposed in a way
 
 The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon SageMaker Endpoint as displayed above.
 
-## AWS Amplify
-In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See (AWS Amplify)[https://docs.amplify.aws/] for more detail.  
+## AWS Amplify.
+In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See [AWS Amplify][https://docs.amplify.aws/] for more detail.  
 
-## Application Architecture:
+## Application Architecture.
 The application architecture is shown in the following diagram:
 ![Application Stack Architecture](images/architecture.png)
 
-While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models.
+While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application tends to be motivating and encourages the developer to press on with the work of learning machine learning model development.
 
-## AWS Lambda role based permissions
+## AWS Lambda role based permissions.
 Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered for secure environments. 
 
-## Hosting an object detection model
-The intent of this exercise is not to cover the building and training of an Amazon Sagemaker object detection model. There are plenty of great resources already covering this such as [Object Detection using the Image and JSON format¶](https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco/object_detection_image_json_format.ipynb)
+## Hosting an object detection model.
+The intent of this exercise is not to cover the building and training of an Amazon Sagemaker object detection model. There are plenty of great resources already covering this such as [Object Detection using the Image and JSON format](https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco/object_detection_image_json_format.ipynb)
 
 If you don't have a model and just want to get started, we have provided an object detection model for download at **TBA**. This model has been trained to detect the rear of cars and other vehicles and is what we will be using in this example. To deploy it follow the instructions at: **TBA**
 
@@ -35,14 +35,15 @@ The following procedure assumes you are on a supported Linux or MacOS device and
 
 **Note:** If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use in during the process. 
 
-To deploy the application stack, follow the below process:
+#### To deploy the application stack, follow the below process:
+
 **Clone this repository and 'cd' into the directory:**  
 ```
 git clone git@github.com:dcolcott/aws-amplify-sagemaker-inference-client.git`
 cd aws-amplify-sagemaker-inference-client
 ```
 
-**NPM install the application dependencies and build the project:**  
+**Install the application dependencies and build the project:**  
 ```
 npm install
 npm run build
@@ -58,7 +59,7 @@ npm install -g @aws-amplify/cli
 amplify init
 ```
 
-Apply the following responses:  
+Enter the following responses:  
 * Enter a name for the project **awsamplifysagemaker**
 * Enter a name for the environment: **dev**
 * Choose your default editor: ***[Select your preferred IDE, select none if not listed.]***
@@ -82,7 +83,7 @@ https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
 amplify add hosting
 ```
 
-Apply the following responses: 
+Enter the following responses: 
 * Select the plugin module to execute **Amazon CloudFront and S3**
 * Select the environment setup: **PROD (S3 with CloudFront using HTTPS)**
 * hosting bucket name: ***[Enter to accept the default or enter a unique value.]***
@@ -91,7 +92,7 @@ Apply the following responses:
 ```
 amplify add api
 ```
-Apply the following responses:  
+Enter the following responses:  
 **Note:** *Some of the text responses given below are referenced in the source code and so must be copied exactly.*
 
 * Please select from one of the below mentioned services: **REST**
@@ -111,13 +112,13 @@ Successfully added the Lambda function locally
 
 Successfully added resource smInferenceClient locally.
 
-**Copy the AWS Lambda code to local AWS Amplify backend function:**
+**Copy the AWS Lambda code to local AWS Amplify backend function:**  
 In the previous step, AWS Amplify defined a skeleton Lambda function with placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code developed for this project: 
 ```
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
-**Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint**
+**Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint**  
 In the previous step, AWS Amplify created an AWS Cloudformation template to deploy the AWS Lambda function including the role-based permissions. Below overwrites this template to also include am additional policy to give the Lambda sagemaker:InvokeEndpoint permissions. 
 ```
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
@@ -141,7 +142,7 @@ In this case because we want to create the environment and also upload the clien
 amplify publish
 ```
 
-* Confirm the update when asked:  
+Confirm the update when asked:  
 ? Are you sure you want to continue? (Y/n): **Y**
 
 At the completion of this command you will be given the URL the application is hosted at such as:
@@ -157,31 +158,36 @@ Record this URL.
 ## Accessing the Web Application.
 On completion of the above sections, the web client will be hosted at an Amazon CloudFront URL that was shown in the previous output. If you missed it just enter `amplify status` and look for the CloudFront distribution URL again.
 
-* Open the Amazon CloudFront URL in a browser and enter into the UI:
+**Open the Amazon CloudFront URL in a browser and enter into the UI:**  
 1. The name of the Amazon SageMaker Endpoint to send the image for inference too,
 1. The AWS region the Endpoint is hosted,
 1. Add the inference labels (these are just for display),
 1. Select an image to send for inference and
 1. Click ‘Submit Inference’
 
-In out case we are sending the inference against a model trained to detect the rear of cars and other vehicles called aws-vehicle-detect that was trained against two labels of ‘car’ and ‘van’ and in the US-EAST-1 region. We selected an image consisting of a busy traffic scene we that was found on the Internet (and not in the training image dataset) and got the below result:
+In out case we are sending the inference against a model trained to detect the rear of cars and other vehicles.  
+* The Endpoint name is: **aws-vehicle-detect**,
+* The labels trained against were: **‘car’ and ‘van’**,
+* The Endpoint is hosted in: **US-EAST-1**
+
+We selected an image consisting of a busy traffic scene we that was found on the Internet (and not in the training image dataset) and got the below result:
 
 **TBA** Add updated image of application in use with car detect model.
 
 As you can see, the client application was able to process the Image and update the response of the Amazon SageMaker Endpoint inference. 
 
-## Conclusion
+## Conclusion.
 **TBA**
 
 
-## Bugs and Issues
+## Bugs and Issues.
 
 TBA
 
-## About
+## About.
 
 TBA
 
-## Copyright and License
+## Copyright and License.
 
 TBA
