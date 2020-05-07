@@ -9,13 +9,13 @@ Once trained, the machine learning model needs to be hosted and exposed in a way
 The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon SageMaker Endpoint as displayed above.
 
 ## AWS Amplify.
-In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See [AWS Amplify][https://docs.amplify.aws/] for more detail.  
+In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See [AWS Amplify]*(https://docs.amplify.aws/) for more detail.  
 
 ## Application Architecture.
 The application architecture is shown in the following diagram:
 ![Application Stack Architecture](images/architecture.png)
 
-While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application tends to be motivating and encourages the developer to press on with the work of learning machine learning model development.
+While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application tends to be motivating and encourages the developer to press on with the work of experimenting with machine learning model development.
 
 ## AWS Lambda role based permissions.
 Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered for secure environments. 
@@ -26,35 +26,35 @@ The intent of this exercise is not to cover the building and training of an Amaz
 If you don't have a model and just want to get started, we have provided an object detection model for download at **TBA**. This model has been trained to detect the rear of cars and other vehicles and is what we will be using in this example. To deploy it follow the instructions at: **TBA**
 
 ## Deploying the application.
-Deploying the application stack described using AWS Amplify is just a few simple commands but does assume you have access to an AWS environment. You are free to deploy in any AWS region but when first creating the hosting resources it can take a few of hours for DNS to propagate and your application to become available if not deployed in the **US-EAST-1** region. For this reason, we will deploy in **US-EAST-1** and encourage you to do the same.
+Deploying the application stack described using AWS Amplify is just a few simple commands but does assume you have access to an AWS environment. You are free to deploy in any AWS region supporting all of the listed services but when first creating the hosting resources it can take a few of hours for DNS to propagate and your application to become available if not deployed in the **US-EAST-1** region. For this reason, we will deploy in **US-EAST-1** and encourage you to do the same.
 
 The following procedure assumes you are on a supported Linux or MacOS device and have installed:
 1. Node: v10.16.x or greater
 1. NPM: v6.13.x or greater
 1. Git: v2.23.0 or greater
 
-**Note:** If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use in during the process. 
+**Note:** If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use in during the process.
 
-#### To deploy the application stack, follow the below process:
+#### To deploy the application stack, follow the below steps.
 
-**Clone this repository and 'cd' into the directory:**  
+**1. Clone this repository and 'cd' into the directory:**  
 ```
 git clone git@github.com:dcolcott/aws-amplify-sagemaker-inference-client.git`
 cd aws-amplify-sagemaker-inference-client
 ```
 
-**Install the application dependencies and build the project:**  
+**2. Install the application dependencies and build the project:**  
 ```
 npm install
 npm run build
 ```
 
-**Install AWS Amplify CLI:**   
+**3. Install AWS Amplify CLI:**   
 ```
 npm install -g @aws-amplify/cli
 ```
 
-**Initialize AWS Amplify in this project:**  
+**4. Initialize AWS Amplify in this project:**  
 ```
 amplify init
 ```
@@ -78,7 +78,7 @@ https://docs.aws.amazon.com/cli/latest/userguide/cli-multiple-profiles.html
 * Do you want to use an AWS profile? **Yes**
 * Please choose the profile you want to use: ***[Choose the profile you want for the desired AWS Account]***
 
-**Using AWS Amplify, add S3 backed CloudFront public hosting:**  
+**5. Using AWS Amplify, add S3 backed CloudFront public hosting:**  
 ```
 amplify add hosting
 ```
@@ -88,7 +88,7 @@ Enter the following responses:
 * Select the environment setup: **PROD (S3 with CloudFront using HTTPS)**
 * hosting bucket name: ***[Enter to accept the default or enter a unique value.]***
 
-**Using AWS Amplify, create the backend API Gateway and serverless function:**  
+**6. Using AWS Amplify, create the backend API Gateway and serverless function:**  
 ```
 amplify add api
 ```
@@ -112,19 +112,19 @@ Successfully added the Lambda function locally
 
 Successfully added resource smInferenceClient locally.
 
-**Copy the AWS Lambda code to local AWS Amplify backend function:**  
+**7. Copy the AWS Lambda code to local AWS Amplify backend function:**  
 In the previous step, AWS Amplify defined a skeleton Lambda function with placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code developed for this project: 
 ```
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
-**Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint**  
+**8. Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint:**  
 In the previous step, AWS Amplify created an AWS Cloudformation template to deploy the AWS Lambda function including the role-based permissions. Below overwrites this template to also include am additional policy to give the Lambda sagemaker:InvokeEndpoint permissions. 
 ```
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
-#### Push the application stack and publish the client-side code.
+**9. Push the application stack and publish the client-side code:**  
 
 The above commands configured the automation scripts to deploy an optimised hosting stack but AWS Amplify only saved these locally in the **amplify** directory that was created with the ```amplify init``` command.
 
