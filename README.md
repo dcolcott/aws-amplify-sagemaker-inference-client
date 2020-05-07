@@ -1,25 +1,26 @@
-# Amazon Sagemaker Inference Endpoint Client Application:
+# Amazon Sagemaker Inference Endpoint Client Application
 
 ![Application Screen Shot](images/app-screenshot.png)
 
 Amazon SageMaker is a fully managed service that removes the heavy lifting from each step of the machine learning process to make it easier to develop and train high quality machine learning models. This is especially attractive to developers that want to incorporate machine learning outcomes onto their applications without having to build and managed every step of the process.
 
-Once trained, the machine learning model needs to be hosted and exposed in a way that makes it accessible to client applications and M2M services. A common way to do this is via an Amazon Sagemaker Endpoint which is a service optimised to hosts machine learning models and to present an authenticated public interface that can be consumed by end user applications.
+Once trained, the machine learning model needs to be hosted and exposed in a way that makes it accessible to client applications and M2M services. A common way to do this is via an Amazon Sagemaker Endpoint which is a service optimised to hosts machine learning models and presents an authenticated public interface that can be consumed by end user applications.
 
-The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration that provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon SageMaker Endpoint as displayed above.
+The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon SageMaker Endpoint as displayed above.
 
-#### AWS Amplify
-In addition to the application stack, AWS Amplify is used to provide a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described further removing the heavy lifting of managing cloud or physical infrastructure from the developer. Through this process and with just a few commands we can deploy the full application stack ready to incorporate object detection inference from our web client. See (AWS Amplify)[https://docs.amplify.aws/] for more detail.  
+## AWS Amplify
+In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See (AWS Amplify)[https://docs.amplify.aws/] for more detail.  
 
-The following diagram shows the application architecture:
+## Application Architecture:
+The application architecture is shown in the following diagram:
 ![Application Stack Architecture](images/architecture.png)
 
 While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models.
 
-#### AWS Lambda role based permissions
-Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use Amazon IAM role-based permissions to allow the AWS Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the AWS Lambda which by virtue of the invoke_endpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered for secure environments. 
+## AWS Lambda role based permissions
+Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered for secure environments. 
 
-#### Hosting an object detection model
+## Hosting an object detection model
 The intent of this exercise is not to cover the building and training of an Amazon Sagemaker object detection model. There are plenty of great resources already covering this such as [Object Detection using the Image and JSON format¶](https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco/object_detection_image_json_format.ipynb)
 
 If you don't have a model and just want to get started, we have provided an object detection model for download at **TBA**. This model has been trained to detect the rear of cars and other vehicles and is what we will be using in this example. To deploy it follow the instructions at: **TBA**
@@ -122,7 +123,7 @@ In the previous step, AWS Amplify created an AWS Cloudformation template to depl
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
-#### Deploy the application stack and publish the client-side code.
+#### Push the application stack and publish the client-side code.
 
 The above commands configured the automation scripts to deploy an optimised hosting stack but AWS Amplify only saved these locally in the **amplify** directory that was created with the ```amplify init``` command.
 
