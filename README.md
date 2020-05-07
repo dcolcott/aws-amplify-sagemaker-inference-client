@@ -9,7 +9,7 @@ Once trained, the machine learning model needs to be hosted and exposed in a way
 The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon SageMaker Endpoint as displayed above.
 
 ## AWS Amplify.
-In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See [AWS Amplify]*(https://docs.amplify.aws/) for more detail.  
+In addition to the application stack, AWS Amplify is used to manage a highly opinionated, secure, scalable and cost optimised deployment of the AWS services described. In doing so, further removing the heavy lifting of managing cloud or physical infrastructure from the developer to host the application. Through this process and with just a few commands, we can deploy the full application stack ready to incorporate object detection inference from our web client. See [AWS Amplify](https://docs.amplify.aws/) for more detail.  
 
 ## Application Architecture.
 The application architecture is shown in the following diagram:
@@ -119,7 +119,7 @@ cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
 **8. Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint:**  
-In the previous step, AWS Amplify created an AWS Cloudformation template to deploy the AWS Lambda function including the role-based permissions. Below overwrites this template to also include am additional policy to give the Lambda sagemaker:InvokeEndpoint permissions. 
+In the previous step, AWS Amplify created an AWS CloudFormation template to deploy the AWS Lambda function including the role-based permissions. The below command overwrites this template to also include an additional policy to give the Lambda sagemaker:InvokeEndpoint permissions. 
 ```
 cp -r lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
@@ -153,19 +153,19 @@ https://AAAABBBBCCCC.cloudfront.net
 
 Record this URL.
 
-**Note:** This command can take some time. It will create a S3 bucket with a secure Amazon CloudFront distribution to publicly host the client side. For the backend, AWS Amplify will create and deploy the Lambda and create an Amazon API gateway and configure the required integrations between the them. 
+**Note:** This command can take some time. It will create an S3 bucket with a secure CloudFront distribution to publicly host the client side application. For the backend, AWS Amplify will create and deploy the Lambda and create an Amazon API gateway and configure the required integrations between the them. 
 
 ## Accessing the Web Application.
 On completion of the above sections, the web client will be hosted at an Amazon CloudFront URL that was shown in the previous output. If you missed it just enter `amplify status` and look for the CloudFront distribution URL again.
 
 **Open the Amazon CloudFront URL in a browser and enter into the UI:**  
-1. The name of the Amazon SageMaker Endpoint to send the image for inference too,
+1. The name of the Amazon SageMaker Endpoint to send the image for inference,
 1. The AWS region the Endpoint is hosted,
 1. Add the inference labels (these are just for display),
 1. Select an image to send for inference and
 1. Click ‘Submit Inference’
 
-In out case we are sending the inference against a model trained to detect the rear of cars and other vehicles.  
+In our case we are sending the inference against a model trained to detect the rear of cars and other vehicles.  
 * The Endpoint name is: **aws-vehicle-detect**,
 * The labels trained against were: **‘car’ and ‘van’**,
 * The Endpoint is hosted in: **US-EAST-1**
