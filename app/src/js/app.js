@@ -7,10 +7,12 @@ import API from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 
 Amplify.configure(awsconfig);
+
 // AWS Amplify Parameters.
 // This must be the AWS Amplify name given to the API object.
-// This is used from the client hosting to access teh URL given to the API Gateway deployed by AWS Amplify.
+// This is used from the client hosting to access the URL given to the API Gateway deployed by AWS Amplify.
 let apiName = 'smInferenceClient';
+
 // This must be the path you have configured on your API in AWS Amplify
 let apiPath = '/api/vi/sagemaker/inference';
 
@@ -38,13 +40,21 @@ butAClassInput.addEventListener('click', addClassInput, false);
 let butRemoveClassInput = document.getElementById("remove-class-input");
 butRemoveClassInput.addEventListener('click', removeClassInput, false);
 
-// lastSelected image holds src as base64 of selected image before any processing.
-let lastSelectedImage = new Image();
+// Var to save submitted inferencve image before scaling and processing.
+let originalImage = new Image();
+
+// The image is re-scaled to fit the window, imageScale allows the bounding boxes to be draw after scaling happens.
+let imageScale = 1
 
 let predictions = [];
 let classCnt = 0;
 let classMap = [];
+
 let colorArray = ['red', 'green', 'blue', 'orange', 'pink', 'yellow', 'purple', 'cyan', 'Chartreuse'];
+
+// Cerate the canvas to scale and draw inference image bounding boxes.
+const canvas = document.createElement('canvas');
+const ctx = canvas.getContext("2d");
 
 //===============================================
 // Image Related Functions
@@ -57,14 +67,16 @@ function imageSelected() {
   // when image is loaded, set the src of the image tag
   fr.onload = function (e) {
 
-    // The displayed image is drawn on in a canvas, lastSelectedImage keeps a copy of the original.
-    lastSelectedImage.src = this.result;
-    imgTarget.src = this.result;
+    // Save submitted inference image into a local var to be sent for inference in original state 
+    // before scaling and drawing of bounding boxes. 
+    originalImage.src = this.result;
+
+    // Set the submitted image in the UI
+    imgTarget.src = originalImage.src;
+
+    // Update the HTML labels with new image
     imageFileLabel.innerHTML = imageFileSelect.files[0].name;
     inferenceText.innerHTML = `Image Selected: ${imageFileSelect.files[0].name}`;
-
-    scaleImageSize();
-
 
     // Reset any previous predictions
     predictions = [];
@@ -72,15 +84,6 @@ function imageSelected() {
 
   // fill fr with image data    
   fr.readAsDataURL(imageFileSelect.files[0]);
-}
-
-/**
- * Reset image to width of parent element and keep image aspect ratio to determine height
- */
-function scaleImageSize() {
-
-  imgTarget.style.width = '100%';
-  imgTarget.style.height = (imgTarget.style.width / lastSelectedImage.width) * lastSelectedImage.height;
 }
 
 //===============================================
@@ -113,14 +116,11 @@ async function submitInference() {
     inferenceText.innerHTML += `Sending the image for inference to the Sagemaker Endpoint......<br />`;
 
     // Post the request
-    // API name set on top of code for easier access.
-    //let apiName = 'smInferenceClient'; // This must be the AWS Amplify name given to the API object.
-    // let path = '/api/vi/sagemaker/inference'; //replace this with the path you have configured on your API
     let apiInit = {
       body: {
         endpoint: epName,
         region: regionSelect.value,
-        imageBase64: lastSelectedImage.src
+        imageBase64: originalImage.src
       }
       // headers: {} // OPTIONAL
     }
@@ -158,35 +158,12 @@ function validateUserInputs() {
   };
 }
 
-
-// No longer used in favor of Amplify API Post.
-// TODO: Keep for now, delete once Amplify completed.
-function asyncPost(url, postData) {
-  const xhttp = new XMLHttpRequest();
-  xhttp.timeout = 20000;
-
-  return new Promise((resolve, reject) => {
-
-    xhttp.onreadystatechange = function onreadystatechange() {
-
-      if (this.readyState === 4 && this.status === 200) {
-        resolve(JSON.parse(this.responseText));
-      } else if (this.readyState === 4 && this.status !== 200) {
-        reject(Error(`status:${this.status} Message:${this.responseText}`));
-      }
-    }
-
-    xhttp.open('POST', url, true);
-    xhttp.setRequestHeader('Content-Type', 'application/json');
-    xhttp.send(JSON.stringify(postData));
-  });
-}
  // Takes Amazon Sagemaker inference endpoint predictions and updates bounding boxed to imgTarget
 function applyPredictionsToImage() {
 
   let threshold = (thresholdSlider.value / 100);
-  let width = lastSelectedImage.width;
-  let height = lastSelectedImage.height;
+  let width = imgTarget.width;
+  let height = imgTarget.height;
 
   // Create the trace canvas to draw on image
   const canvas = document.createElement('canvas');
@@ -194,7 +171,7 @@ function applyPredictionsToImage() {
   canvas.height = height;
 
   const ctx = canvas.getContext('2d');
-  ctx.drawImage(lastSelectedImage, 0, 0, width, height);
+  ctx.drawImage(originalImage, 0, 0, width, height);
   ctx.lineWidth = 2;
   ctx.font = "15px Arial";
 
@@ -319,6 +296,5 @@ function getPredictionLabel(classVal) {
   return classLabel;
 }
 
-// Once all loaded, scale the placeholder image to screen and set initial threshold
-scaleImageSize();
+// Set initial threshold
 thresholdUpdate();

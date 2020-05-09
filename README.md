@@ -97,7 +97,7 @@ Enter the following responses:
 
 * Please select from one of the below mentioned services: **REST**
 * Provide a friendly name for your resource to be used as a label for this category in the project: **smInferenceClient**
-* Provide a path (e.g., /items) **/api/vi/sagemaker/inference**
+* Provide a path (e.g., /items) **/api/v1/sagemaker/inference**
 * Choose a Lambda source: **Create a new Lambda function**
 * Provide a friendly name for your resource to be used as a label for this category in the project: **awsamplifysagemaker**
 * Provide the AWS Lambda function name: **awsamplifysagemaker**
