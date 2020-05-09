@@ -51,7 +51,7 @@ npm run build
 
 **3. Install AWS Amplify CLI:**   
 ```
-npm install -g @aws-amplify/cli
+npm install -g @aws-amplify/cli@4.18.1
 ```
 
 **4. Initialize AWS Amplify in this project:**  
