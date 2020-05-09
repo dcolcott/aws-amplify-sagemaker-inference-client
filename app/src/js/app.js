@@ -1,11 +1,10 @@
 
-// Note: Importing al amplify is REALLY big so removed
-// Just import the modules you need using @aws-amplify/[module x] as below. 
-//import Amplify, { API } from 'aws-amplify';
+// Import the AWS Amplify modules used in this project:
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 
+// Configure AWS Amplify using defibe confg file.
 Amplify.configure(awsconfig);
 
 // AWS Amplify Parameters.
@@ -14,11 +13,13 @@ Amplify.configure(awsconfig);
 let apiName = 'smInferenceClient';
 
 // This must be the path you have configured on your API in AWS Amplify
-let apiPath = '/api/vi/sagemaker/inference';
+let apiPath = '/api/v1/sagemaker';
+let inferenceApiPath = apiPath + '/inference';
+let endpointApiPath = apiPath + '/endpoints';
 
 //===============================================
 // Get DOM objects
-let imgTarget = document.getElementById("test-image-display");
+let imgTarget = document.getElementById("inference-image-display");
 let imageFileLabel = document.getElementById("image-file-label");
 let imageFileSelect = document.getElementById("image-file-select");
 imageFileSelect.addEventListener('change', imageSelected, false);
@@ -42,9 +43,6 @@ butRemoveClassInput.addEventListener('click', removeClassInput, false);
 
 // Var to save submitted inferencve image before scaling and processing.
 let originalImage = new Image();
-
-// The image is re-scaled to fit the window, imageScale allows the bounding boxes to be draw after scaling happens.
-let imageScale = 1
 
 let predictions = [];
 let classCnt = 0;
@@ -71,7 +69,7 @@ function imageSelected() {
     // before scaling and drawing of bounding boxes. 
     originalImage.src = this.result;
 
-    // Set the submitted image in the UI
+    // Display the submitted image in the UI
     imgTarget.src = originalImage.src;
 
     // Update the HTML labels with new image
@@ -116,6 +114,7 @@ async function submitInference() {
     inferenceText.innerHTML += `Sending the image for inference to the Sagemaker Endpoint......<br />`;
 
     // Post the request
+    // TODO: If image source is very large can cause long delay, add option to scale image down before POST'ing
     let apiInit = {
       body: {
         endpoint: epName,
@@ -124,7 +123,7 @@ async function submitInference() {
       }
       // headers: {} // OPTIONAL
     }
-    let response = await API.post(apiName, apiPath, apiInit);
+    let response = await API.post(apiName, inferenceApiPath, apiInit);
 
     if (!response.statusCode) {
       throw Error("An unknown error occured")

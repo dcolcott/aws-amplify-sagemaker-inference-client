@@ -1,5 +1,7 @@
 # Amazon Sagemaker Inference Endpoint Client Application.
 
+A hosted instance of this application stack can be seen at: [aws-inference-client](https://aws-inference-client.dcolcott.com/)
+
 ![Application Screen Shot](images/app-screenshot.png)
 
 Amazon SageMaker is a fully managed service that removes the heavy lifting from each step of the machine learning process to make it easier to develop and train high quality machine learning models. This is especially attractive to developers that want to incorporate machine learning outcomes onto their applications without having to build and managed every step of the process.
@@ -17,8 +19,8 @@ The application architecture is shown in the following diagram:
 
 While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application tends to be motivating and encourages the developer to press on with the work of experimenting with machine learning model development.
 
-## AWS Lambda role based permissions.
-Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered for secure environments. 
+## AWS Lambda role-based permissions.
+Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered in secure environments. 
 
 ## Hosting an object detection model.
 The intent of this exercise is not to cover the building and training of an Amazon Sagemaker object detection model. There are plenty of great resources already covering this such as [Object Detection using the Image and JSON format](https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco/object_detection_image_json_format.ipynb)
@@ -97,12 +99,12 @@ Enter the following responses:
 
 * Please select from one of the below mentioned services: **REST**
 * Provide a friendly name for your resource to be used as a label for this category in the project: **smInferenceClient**
-* Provide a path (e.g., /items) **/api/v1/sagemaker/inference**
+* Provide a path (e.g., /items) **/api/v1/sagemaker**
 * Choose a Lambda source: **Create a new Lambda function**
 * Provide a friendly name for your resource to be used as a label for this category in the project: **awsamplifysagemaker**
 * Provide the AWS Lambda function name: **awsamplifysagemaker**
 * Choose the function runtime that you want to use: **NodeJS**
-* Choose the function template that you want to use: **Serverless express function (Integration with Amazon API Gateway)**
+* Choose the function template that you want to use: **Serverless ExpressJS function (Integration with API Gateway)**
 * Do you want to access other resources created in this project from your Lambda function? **No**  
 * Do you want to invoke this function on a recurring schedule" **No**
 * Do you want to edit the local lambda function now? **No**  
@@ -148,12 +150,19 @@ Confirm the update when asked:
 At the completion of this command you will be given the URL the application is hosted at such as:
 ```
 Your app is published successfully.
-https://AAAABBBBCCCC.cloudfront.net
+https://aaaabbbbcccc.cloudfront.net
 ```
 
 Record this URL.
 
 **Note:** This command can take some time. It will create an S3 bucket with a secure CloudFront distribution to publicly host the client side application. For the backend, AWS Amplify will create and deploy the Lambda and create an Amazon API gateway and configure the required integrations between the them. 
+
+## Updating the hosting environment or application code
+If in the future you choose to update the hosting environment with any of the many additional features of AWS Amplify such as Analytics, Notifications, PubSubs or Storage all you need to do is then apply the ```amplify push`` command. This will update the hosted services without updating the application front end content.
+
+If you update the application front end code and want to synchronized that and the hosted environment apply the ```amplify publish``` command. 
+
+A quick tip, if as in this case you are hosting the content via an Amazon CloudFront distribution then include the ‘-c’ switch to force an invalidation of the CDN cache to ensure your new content is presented to the Internet such as: ```amplify publish -c```
 
 ## Accessing the Web Application.
 On completion of the above sections, the web client will be hosted at an Amazon CloudFront URL that was shown in the previous output. If you missed it just enter `amplify status` and look for the CloudFront distribution URL again.

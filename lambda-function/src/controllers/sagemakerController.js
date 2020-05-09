@@ -85,7 +85,61 @@ function sagemakerController() {
     }
   }
 
-  return { postInference };
+  async function postEndpoints(req, res) {
+
+    let response = {};
+
+    try {
+
+      let body = req.body;
+      let region = body.region;
+
+      //================================================
+      // Validate the user inputs:
+
+      // Test if an AWS Region was entered.
+      if (region === undefined || region.length < 1) {
+        throw new Error('No AWS Region was provided.');
+      };
+
+      // Init the AWS client. 
+      var sagemaker = new AWS.SageMaker({
+        apiVersion:  '2017-07-24',
+        region: region
+      });
+
+      // Create the param to send to Sagemaker.
+      var params = {
+        SortBy: "Name",
+        SortOrder: "Descending",
+        StatusEquals: "InService"
+      };
+      
+      // Send the image to Sagemaker endpoint for inference and parse result.
+      let data = await sagemaker.listEndpoints(params).promise();
+      console.log(data);
+      //let result = String.fromCharCode.apply(null, data.Body);
+      //let endpoints = JSON.parse(data);
+      let endpoints = data.Endpoints;
+
+      // Build the success response object with inference predictions.
+      response.status = 'success';
+      response.statusCode = 200;
+      response.result = endpoints;
+
+    } catch (err) {
+      response.status = 'error';
+      response.statusCode = 500;
+      response.error_message = err.message;
+      response.error_trace = err.stack;
+      console.log(response);
+
+    } finally {
+      res.json(response);
+    }
+  }
+
+  return { postInference, postEndpoints };
 }
 
 module.exports = sagemakerController;

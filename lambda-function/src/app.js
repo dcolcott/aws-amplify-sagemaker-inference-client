@@ -37,8 +37,8 @@ app.use(function(req, res, next) {
 /*********************************
 * Local routes                    *
 **********************************/
-app.use('/api/vi/sagemaker', sagemakerRouter());
-app.use('/api/vi/sagemaker/*', sagemakerRouter());
+app.use('/api/v1/sagemaker', sagemakerRouter());
+app.use('/api/v1/sagemaker/*', sagemakerRouter());
 
 /*********************************
 * Start the App server           *

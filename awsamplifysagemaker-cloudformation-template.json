@@ -140,6 +140,13 @@
                                     }
                                 ]
                             }
+                        },
+                        {
+                            "Effect": "Allow",
+                            "Action": [
+                                "sagemaker:ListEndpoints"
+                            ],
+                            "Resource": "*"
                         }
                     ]
                 }
