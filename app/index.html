@@ -62,10 +62,9 @@
           <div class="input-group-prepend">
             <span class="input-group-text mb-1" id="endpoint-name-label">Endpoint Name:</span>
           </div>
-          <input type="text" class="form-control" id="endpoint-name" placeholder="Enter Endpoint name"
-            data-toggle="tooltip" data-placement="bottom"
-            title="Enter the endpoint name as shown in Amazon Sagemaker. Must be in AWS Region selected."
-            aria-label="Sagemaker Endpoint" aria-describedby="endpoint-name-label">
+          <select class="form-control" id="endpoint-name-select" name="endpoint-name-select">
+            <!-- Programatically filled with Sagemaker Endpoints in the selected region. -->
+          </select>
         </div>
 
         <div class="col-sm-6 input-group mb-1">
@@ -190,7 +189,10 @@
           <p class="lead">Quick Start:</p>
           <p>To use, follow the below steps:
             <ol>
-              <li>Enter the name of the Sagemaker Endpoint in the 'Enter Endpoint' field.</li>
+              <li>Select the name of the Sagemaker Endpoint in the 'Enter Endpoint' field.</li>
+              <ul>
+                <li>The Sagemaker endpoints in the selected region will be displayed, if none available then check the region has ‘InService’ Endpoints to consume.</li>
+              </ul>
               <li>Enter the Class labels used when training the model into the 'Inference Class List' by clicking 'Add
                 Class' and typing in the ordered class list:</li>
               <ul>

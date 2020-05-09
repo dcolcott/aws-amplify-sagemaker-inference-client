@@ -117,7 +117,7 @@ Successfully added resource smInferenceClient locally.
 **7. Copy the AWS Lambda code to local AWS Amplify backend function:**  
 In the previous step, AWS Amplify defined a skeleton Lambda function with placeholders for the function handler. The below command overwrites this with the Sagemaker Inference client backend source code developed for this project: 
 ```
-cp -rF lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
+cp -rf lambda-function/src/ amplify/backend/function/awsamplifysagemaker/src/
 ```
 
 **8. Update AWS Amplify generated Lambda role-based policy to add InvokeEndpoint:**  

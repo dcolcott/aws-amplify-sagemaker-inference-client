@@ -24,7 +24,7 @@ let imageFileLabel = document.getElementById("image-file-label");
 let imageFileSelect = document.getElementById("image-file-select");
 imageFileSelect.addEventListener('change', imageSelected, false);
 
-let endpointName = document.getElementById("endpoint-name");
+let endpointNameSelect = document.getElementById("endpoint-name-select");
 let submit = document.getElementById("submit-inference");
 submit.addEventListener('click', submitInference, false);
 
@@ -34,6 +34,7 @@ thresholdSlider.addEventListener('change', thresholdUpdate, false);
 
 let thresholdLabel = document.getElementById("threshold-range-label");
 let regionSelect = document.getElementById("region-select");
+regionSelect.addEventListener('change', setSagemakerEndpoints, false);
 
 let butAClassInput = document.getElementById("add-class-input");
 butAClassInput.addEventListener('click', addClassInput, false);
@@ -49,10 +50,6 @@ let classCnt = 0;
 let classMap = [];
 
 let colorArray = ['red', 'green', 'blue', 'orange', 'pink', 'yellow', 'purple', 'cyan', 'Chartreuse'];
-
-// Cerate the canvas to scale and draw inference image bounding boxes.
-const canvas = document.createElement('canvas');
-const ctx = canvas.getContext("2d");
 
 //===============================================
 // Image Related Functions
@@ -97,8 +94,8 @@ async function submitInference() {
     validateUserInputs();
 
     //================================================
-    // Remove any spaces from the endpointName that can happen from copy and paste.
-    let epName = endpointName.value.replace(/ /g, '');
+    // Remove any spaces from the endpointNameSelect that can happen from copy and paste.
+    let epName = endpointNameSelect.value.replace(/ /g, '');
 
     // Update the text output div
     inferenceText.innerHTML = `Image Selected: ${imageFileSelect.files[0].name}<br />`;
@@ -144,6 +141,37 @@ async function submitInference() {
   }
 }
 
+async function setSagemakerEndpoints() {
+
+  try {
+    // Post the request
+    let apiInit = {
+      body : {
+      region: regionSelect.value
+      }
+    }
+    let response = await API.post(apiName, endpointApiPath, apiInit);
+
+    if (!response.statusCode) {
+      throw Error("An unknown error occured")
+    } else if (response.statusCode !== 200) {
+      throw Error(response.error_message);
+    }
+
+    let endpoints = response.result;
+    var options = endpoints.map(function (endpoint) {
+      let epName = endpoint.EndpointName;
+      return `<option value=${epName}>${epName}</option>`
+    });
+
+    endpointNameSelect.innerHTML = options;
+
+  } catch (err) {
+    inferenceText.innerHTML += `ERROR: An error occurred retrieving the selected regions Sagemaker Endpoints:<br />${err}`;
+    console.log(err, err.stack);
+  }
+}
+
 function validateUserInputs() {
 
   // Test user has selected an image
@@ -152,12 +180,12 @@ function validateUserInputs() {
   };
 
   // Test an Endpoint was entered.
-  if (endpointName.value === undefined || endpointName.value.length < 1) {
+  if (endpointNameSelect.value === undefined || endpointNameSelect.value.length < 1) {
     throw Error('No Sagemaker Inference Endpoint has been entered.');
   };
 }
 
- // Takes Amazon Sagemaker inference endpoint predictions and updates bounding boxed to imgTarget
+// Takes Amazon Sagemaker inference endpoint predictions and updates bounding boxed to imgTarget
 function applyPredictionsToImage() {
 
   let threshold = (thresholdSlider.value / 100);
@@ -297,3 +325,5 @@ function getPredictionLabel(classVal) {
 
 // Set initial threshold
 thresholdUpdate();
+
+setSagemakerEndpoints();
