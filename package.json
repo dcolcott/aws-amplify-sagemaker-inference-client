@@ -16,13 +16,17 @@
     "@aws-amplify/api": "latest",
     "@aws-amplify/pubsub": "latest",
     "aws-amplify": "^2.2.0",
-    "aws-serverless-express": "^3.3.6"
+    "aws-serverless-express": "^3.3.6",
+    "bootstrap": "^4.5.2",
+    "jquery": "^3.5.1",
+    "jquery-easing": "0.0.1",
+    "startbootstrap-freelancer": "^6.0.4"
   },
   "devDependencies": {
-    "webpack": "^4.17.1",
-    "webpack-cli": "^3.1.0",
-    "copy-webpack-plugin": "^4.5.2",
-    "webpack-dev-server": "^3.1.5"
+    "copy-webpack-plugin": "^6.2.0",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12",
+    "webpack-dev-server": "^3.11.0"
   },
   "keywords": [
     "Amazon",

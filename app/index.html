@@ -11,29 +11,30 @@
   <title>Sagemaker Inference Client</title>
 
   <!-- Custom fonts for this theme -->
-  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
+
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
   <link href="https://fonts.googleapis.com/css?family=Lato:400,700,400italic,700italic" rel="stylesheet"
     type="text/css">
 
   <!-- Theme CSS -->
-  <link href="css/freelancer.min.css" rel="stylesheet">
+  <link href="css/freelancer.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
 
 </head>
 
 <body id="page-top">
 
   <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top" id="mainNav">
+  <nav class="navbar navbar-expand-lg bg-secondary text-uppercase fixed-top">
     <div class="container">
       <div class="pr-4">
-        <a href="https://aws.amazon.com/what-is-cloud-computing">
+        <a href="https://aws.amazon.com">
           <img src="https://d0.awsstatic.com/logos/powered-by-aws-white.png" style="width:100px;height:36px;"
             alt="Powered by AWS Cloud Computing">
         </a>
       </div>
-      <a class="navbar-brand js-scroll-trigger" href="#page-top">Sagemaker Inference Client</a>
-      <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-primary text-white rounded"
+      <h3 class="text-white">Sagemaker Inference Client</h3>
+      <button class="navbar-toggler navbar-toggler-right text-uppercase font-weight-bold bg-darkgray text-white rounded"
         type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive"
         aria-expanded="false" aria-label="Toggle navigation">
         Menu
@@ -114,7 +115,7 @@
         </div>
 
         <div class="col-sm-2 mb-2 text-right">
-          <button type="button" class="btn btn-secondary" id="submit-inference">Submit Inference</button>
+          <button type="button" class="btn btn-secondary" id="submit-inference">Submit</button>
 
         </div>
       </div>
@@ -163,20 +164,11 @@
   </section>
 
   <!-- Quickstart Section -->
-  <section class="page-section bg-primary text-white mb-0" id="quickstart">
+  <section class="page-section bg-darkgray text-white mb-0" id="quickstart">
     <div class="container">
 
       <!-- Quickstart Section Heading -->
       <h2 class="page-section-heading text-center text-uppercase text-white">Quick Start</h2>
-
-      <!-- Icon Divider -->
-      <div class="divider-custom divider-light">
-        <div class="divider-custom-line"></div>
-        <div class="divider-custom-icon">
-          <i class="fas fa-star"></i>
-        </div>
-        <div class="divider-custom-line"></div>
-      </div>
 
       <!-- Quickstart Section Content -->
       <div class="row">
@@ -207,7 +199,7 @@
                 <li>This can be updated without reprocessing the inference so don't worry to much about the initial
                   value.</li>
               </ul>
-              <li>Finally, Click 'Submit Inference':</li>
+              <li>Finally, Click 'Submit':</li>
               <ul>
                 <li>At this point the image will be sent to the Amazon Sagemaker Endpoint for Inference.</li>
                 <li>The return will be processed. All identified objects will be displayed in the Inference Display
@@ -228,7 +220,7 @@
   <!-- Copyright Section -->
   <section class="copyright py-4 text-center text-white">
     <div class="container">
-      <small>Copyright &copy; Amazon Web Services 2019</small>
+      <small>Copyright &copy; Amazon Web Services 2020</small>
     </div>
   </section>
 
@@ -239,15 +231,15 @@
     </a>
   </div>
 
-  <!-- Bootstrap core JavaScript -->
-  <script src="vendor/jquery/jquery.min.js"></script>
-  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap core / JQuery JavaScript   -->
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 
-  <!-- Plugin JavaScript -->
-  <script src="vendor/jquery-easing/jquery.easing.min.js"></script>
+  <!-- Plugin JavaScript  -->  
+  <script src="  https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js"></script>
 
   <!-- Custom scripts for this template -->
-  <script src="freelancer.js"></script>
+  <script src="vendor/startbootstrap-freelancer/scripts.js"></script>
 
   <!-- Custom scripts for Sagemaker Inference -->
   <script src="main.bundle.js"></script>

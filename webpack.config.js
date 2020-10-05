@@ -23,14 +23,17 @@ module.exports = {
         hot: true
     },
     plugins: [
-        new CopyWebpackPlugin([
+        new CopyWebpackPlugin({
+            patterns: [
                                 './app/index.html',
-                                './app/src/js/freelancer.js',
                                 {from: './app/css', to: 'css'},
                                 {from: './app/img', to: 'img'},
-                                {from: './app/vendor', to: 'vendor'},
-                                
-                            ]),
+                                {from: './node_modules/startbootstrap-freelancer/dist/js/scripts.js', to: 'vendor/startbootstrap-freelancer/scripts.js'},
+                                {from: './node_modules/startbootstrap-freelancer/dist/css/styles.css', to: 'css/freelancer.css'}
+             ]
+            }
+        ),
+        
         new webpack.HotModuleReplacementPlugin()
     ]
 };

@@ -22,12 +22,73 @@ While provided as a code example, this application has also proven to be a usefu
 ## AWS Lambda role-based permissions.
 Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered in secure environments. 
 
-## Hosting an object detection model.
-The intent of this exercise is not to cover the building and training of an Amazon Sagemaker object detection model. There are plenty of great resources already covering this such as [Object Detection using the Image and JSON format](https://github.com/awslabs/amazon-sagemaker-examples/blob/master/introduction_to_amazon_algorithms/object_detection_pascalvoc_coco/object_detection_image_json_format.ipynb)
+## Hosting an object detection model endpoint
 
-If you don't have a model and just want to get started, we have provided an object detection model for download at **TBA**. This model has been trained to detect the rear of cars and other vehicles and is what we will be using in this example. To deploy it follow the instructions at: **TBA**
+Before we can deploy the inference client application we need an object detection model hosted on an Amazon Sagemaker Endpoint to make API calls against to peform the inference. This is a two part process of first defining the model object in Amazon Sagemaker and then hostiong it on an Amazon Sagemaker Endpoint.
 
-## Deploying the application.
+For this example we will use the model avliable at: [aws-vehicle-rear-detect-2020-05-09-model.tar.gz](https://static.dcolcott.com/sagemaker-vehicle-object-detect-lab/aws-vehicle-rear-detect-2020-05-09-model.tar.gz)
+
+This is a custom MXnet model built for this purpouse that has been trained on a relativly small training set of 210 images to detect the rear view of various cars / vehicles. If you have your own supported object detection model you are welcome to use that insetad.
+
+### Deploying the Amazopn Sagemaker Model:
+
+In Amazon Sagemaker a Model object consists of the ML model itself and a container with the logic required to peform the inference. You are welcome to use your own custom containers but for conveniance AWS also provode these for each of the supported ML frameworks. 
+
+To create an Amazon Sagemaker Model:
+1) Download the object-detection ML model provided above (or have your own available) and upload to S3 in the intended deployment AWS region,
+
+#### Identify the inference container
+AWS provide an Inference Image Registry Path for each supported region. You can find the registery path for your chosen region the **Algorithms: BlazingText, Image Classification, Object Detection** table at [AWS Inference Image Registry Path](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html)
+
+In this example we will be deploying to ap-southeast-2 so will be using the registry path: **544295431143.dkr.ecr.ap-southeast-2.amazonaws.com**. Find the corosponding registry path for your region in the table referenced above.
+
+Finally, we request the specific container that peforms inference on object-detection models by adding the container name (object-detection) and a tag to specify we want to use the latest released such as below:  
+```544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/object-detection:latest```
+
+If deploying in us-west-1 then you will need to update the Image Registry Path and again call the object-detection container:  
+```632365934929.dkr.ecr.us-west-1.amazonaws.com/object-detection:latest```
+
+And as a final example if doing the same in eu-central-1 the container would be:
+```813361260812.dkr.ecr.eu-central-1.amazonaws.com/object-detection:latest```
+
+#### Create the Amazon Sagemaker model object
+
+
+Its assumed at this point you have the reference to the inference container in your region. You will also need the ARN of an Amazon Sagemaker Executation Role that has the AmazonSageMakerFullAccess IAM policy attached and finally the path to the object detextion model in S3. 
+
+With all of these you can use the below to create the Amazon Sagemaker Model object with the below command
+
+```
+# Enter name that will be given to the Amazon Sagemaker Model Object
+MODEL_NAME=aws-vehicle-rear-detect-2020-05-09-03
+
+# Enter teh model inference container reference
+MODEL_CONTAINER=544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/object-detection:latest
+
+# Enter the supported Object Detection ML Model S3 URL
+MODEL_S3_URI=s3://my-s3-bucket/aws-vehicle-rear-detect-2020-05-09-model.tar.gz
+
+# Enter ARN for Amazon Sagemaker Executition Role with AmazonSageMakerFullAccess IAM policy attached 
+SM_EXE_ROLE_ARN=arn:aws:iam::123456789012:role/service-role/AmazonSageMaker-ExecutionRole
+
+# Create the Amazon Sagemaker Model
+aws sagemaker create-model \
+--model-name $MODEL_NAME \
+--primary-container "Image=$MODEL_CONTAINER, ModelDataUrl=$MODEL_S3_URI" \
+--execution-role-arn $SM_EXE_ROLE_ARN
+```
+
+**Note:**  Above assumed you have suitable credentials and AWS CLI installed and in use.
+
+You can now go to the Amazon Sagemaker console and select Models (under the Inference menu) and see the Amazon Sagemaker Model has been created. 
+
+#### Create the Amazon Sagemaker Endpoint
+
+TBA.
+
+
+
+## Deploying the Inference Client Application.
 Deploying the application stack described using AWS Amplify is just a few simple commands but does assume you have access to an AWS environment. You are free to deploy in any AWS region supporting all of the listed services but when first creating the hosting resources it can take a few of hours for DNS to propagate and your application to become available if not deployed in the **US-EAST-1** region. For this reason, we will deploy in **US-EAST-1** and encourage you to do the same.
 
 The following procedure assumes you are on a supported Linux or MacOS device and have installed:
@@ -184,19 +245,3 @@ We selected an image consisting of a busy traffic scene we that was found on the
 **TBA** Add updated image of application in use with car detect model.
 
 As you can see, the client application was able to process the Image and update the response of the Amazon SageMaker Endpoint inference. 
-
-## Conclusion.
-**TBA**
-
-
-## Bugs and Issues.
-
-TBA
-
-## About.
-
-TBA
-
-## Copyright and License.
-
-TBA
