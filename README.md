@@ -70,7 +70,7 @@ With all of these you can create the Amazon Sagemaker Model object with the belo
 MODEL_NAME=aws-vehicle-rear-detect-2020-05-09
 
 # Enter the model inference container reference
-MODEL_CONTAINER=544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/object-detection:latest
+MODEL_CONTAINER=811284229777.dkr.ecr.us-east-1.amazonaws.com/object-detection:latest
 
 # Enter the supported Object Detection ML Model S3 URL
 MODEL_S3_URI=s3://my-s3-bucket/aws-vehicle-rear-detect-2020-05-09-model.tar.gz
