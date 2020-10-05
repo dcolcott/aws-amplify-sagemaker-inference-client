@@ -39,10 +39,10 @@ This is a custom MXnet model built for this purpose that has been trained on a r
 
 In Amazon Sagemaker a Model object consists of the ML model itself and a container with the logic required to perform the inference. You are welcome to use your own custom containers but for convenience AWS also provide these for each of the supported ML frameworks. 
 
-To create an Amazon Sagemaker Model:
-1) Download the object-detection ML model provided above (or have your own available) and upload to S3 in the intended deployment AWS region,
+#### Save ML object detection model to S3  
+Download the object-detection ML model provided above (or have your own available) and upload to S3 in the AWS region you intended todeploy the inference client application.
 
-#### Identify the inference container
+#### Identify the inference container  
 AWS provide an Inference Image Registry Path for each supported region. You can find the registry path for your chosen region the *Algorithms: BlazingText, Image Classification, Object Detection* table shown at [AWS Inference Image Registry Path](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html)
 
 In this example we will be deploying to **US-EAST-1** so will be using the registry path:  
@@ -54,7 +54,7 @@ Finally, we request the specific container that performs inference on object-det
 **811284229777.dkr.ecr.us-east-1.amazonaws.com/object-detection:latest**  
 
 If deploying in ap-southeast-2 then you will need to update the Image Registry Path as the below example:  
-**544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/object-detection:latest***   
+**544295431143.dkr.ecr.ap-southeast-2.amazonaws.com/object-detection:latest**   
 
 And as a final example if doing the same in eu-central-1 the container would be:
 **813361260812.dkr.ecr.eu-central-1.amazonaws.com/object-detection:latest**  
