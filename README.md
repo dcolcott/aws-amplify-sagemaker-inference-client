@@ -27,7 +27,7 @@ Amazon Sagemaker Endpoints present an authenticated interface to the Internet so
 ## AWS Command Line Interface
 The remaining sections will deploy the resources and architecture to host a Amazon Sagemaker Endpoint and the Inference Client Application using the AWS Command Line Interface. If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use in during the process.
 
-## Hosting an object detection model endpoint
+## Hosting an Object Detection Model Endpoint
 
 Before we can deploy the inference client application, we need an object detection model hosted on an Amazon Sagemaker Endpoint to make API calls against to perform the inference. This is a two-part process of first defining the model object in Amazon Sagemaker and then hosting it on an Amazon Sagemaker Endpoint.
 
@@ -42,7 +42,9 @@ In Amazon Sagemaker a Model object consists of the ML model itself and a contain
 #### Save ML object detection model to S3  
 Download the object-detection ML model provided above (or have your own available) and upload to S3 in the AWS region you intended todeploy the inference client application.
 
-#### Identify the inference container  
+Follow this guide on how to [Create and Amazon S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-configure-bucket.html) if you don't already have one in the specific AWS region.
+
+#### Identify the Inference Container  
 AWS provide an Inference Image Registry Path for each supported region. You can find the registry path for your chosen region the *Algorithms: BlazingText, Image Classification, Object Detection* table shown at [AWS Inference Image Registry Path](https://docs.aws.amazon.com/sagemaker/latest/dg/sagemaker-algo-docker-registry-paths.html)
 
 In this example we will be deploying to **US-EAST-1** so will be using the registry path:  
@@ -97,16 +99,11 @@ To create the Amazon Sagemaker Endpoint you first need to create the Endpoint co
 # Enter the Sagemaker Endpoint Config Name to use
 EPC_NAME=epc-inference-client-application
 
-# Enter Sagemaker Model to use in this endpoint (in this example is assumed to be the Model created above):
-MODEL_NAME=aws-vehicle-rear-detect-2020-05-09
-
-# Enter Amazon ML Instance type the Endpoint will deploy. Adjust as needed for performance and cost.
-INSTANCE_TYPE=ml.m4.xlarge
-
-# Create the Amazon Sagemaker Endpoint configuration object:
+# Create the Amazon Sagemaker Endpoint configuration object.
+# Note:  Adjust the Model Name, Instance Count and Instance type as needed. 
 aws sagemaker create-endpoint-config \
---endpoint-config-name $EPC_NAME\
---production-variants '[{"VariantName":"variant-1", "ModelName":"$MODEL_NAME", "InitialInstanceCount": 1, "InstanceType": "$INSTANCE_TYPE"}]'
+--endpoint-config-name $EPC_NAME \
+--production-variants '[{"VariantName":"variant-1", "ModelName":"aws-vehicle-rear-detect-2020-05-09", "InitialInstanceCount": 1, "InstanceType":"ml.m4.xlarge"}]'
 ```
 
 #### Deploy the Amazon Sagemaker Endpoint
