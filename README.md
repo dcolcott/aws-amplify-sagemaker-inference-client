@@ -2,7 +2,7 @@
 
 A hosted instance of this application stack can be seen at: [aws-inference-client](https://dbxdefot548c.cloudfront.net/)
 
-![Application Screen Shot](images/app-screenshot.png)
+![Application Example Use Screen Shot](images/app-car-inference-client.png)
 
 Amazon SageMaker is a fully managed service that removes the heavy lifting from each step of the machine learning process to make it easier to develop and train high quality machine learning models. This is especially attractive to developers that want to incorporate machine learning outcomes onto their applications without having to build and managed every step of the process.
 
