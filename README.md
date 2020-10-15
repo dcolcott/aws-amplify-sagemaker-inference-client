@@ -1,6 +1,6 @@
 # Amazon Sagemaker Inference Client Application.
 
-A hosted instance of this application stack can be seen at: [aws-inference-client](https://aws-inference-client.dcolcott.com/)
+A hosted instance of this application stack can be seen at: [aws-inference-client](https://dbxdefot548c.cloudfront.net/)
 
 ![Application Screen Shot](images/app-screenshot.png)
 

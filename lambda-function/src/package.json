@@ -16,5 +16,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Dean Colcott: https://www.linkedin.com/in/deancolcott",
-  "license": "ISC"
+  "license": "MIT-0"
 }

@@ -6,7 +6,7 @@
     "start": "webpack && webpack-dev-server --mode development",
     "build": "webpack"
   },
-  "license": "MIT",
+  "license": "MIT-0",
   "author": "Dean Colcott: https://www.linkedin.com/in/deancolcott",
   "repository": {
     "type": "git",
