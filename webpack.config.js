@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = {
     mode: 'production',
-    entry: './app/src/js/app.js',
+    entry: './src/js/app.js',
     output: {
         filename: '[name].bundle.js',
         path: path.resolve(__dirname, 'dist')
@@ -25,9 +25,9 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
-                                './app/index.html',
-                                {from: './app/css', to: 'css'},
-                                {from: './app/img', to: 'img'},
+                                './src/index.html',
+                                {from: './src/css', to: 'css'},
+                                {from: './src/img', to: 'img'},
                                 {from: './node_modules/startbootstrap-freelancer/dist/js/scripts.js', to: 'vendor/startbootstrap-freelancer/scripts.js'},
                                 {from: './node_modules/startbootstrap-freelancer/dist/css/styles.css', to: 'css/freelancer.css'}
              ]

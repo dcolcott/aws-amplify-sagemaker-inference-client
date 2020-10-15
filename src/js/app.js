@@ -2,7 +2,7 @@
 // Import the AWS Amplify modules used in this project:
 import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
-import awsconfig from '../../aws-exports';
+import awsconfig from '../aws-exports';
 
 // Configure AWS Amplify using defined confg file.
 Amplify.configure(awsconfig);

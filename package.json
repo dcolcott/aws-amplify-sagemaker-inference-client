@@ -10,7 +10,7 @@
   "author": "Dean Colcott: https://www.linkedin.com/in/deancolcott",
   "repository": {
     "type": "git",
-    "url": "https://github.com/dcolcott/aws-amplify-sagemaker-inference-client"
+    "url": "https://github.com/aws-samples/amazon-sagemaker-inference-client.git"
   },
   "dependencies": {
     "@aws-amplify/api": "latest",

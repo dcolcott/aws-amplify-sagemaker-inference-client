@@ -135,7 +135,7 @@ The following procedure assumes you are on a supported Linux or MacOS device and
 
 **1. Clone the Amazon Sagemaker Inference Client Application GIT repository and 'cd' into the directory:**  
 ```
-git clone https://github.com/aws-samples/amazon-sagemaker-inference-client.git`
+git clone https://github.com/aws-samples/amazon-sagemaker-inference-client.git
 cd amazon-sagemaker-inference-client
 ```
 
@@ -157,12 +157,12 @@ amplify init
 
 Enter the following responses:  
 * Enter a name for the project **awsamplifysagemaker**
-* Enter a name for the environment: **dev**
+* Enter a name for the environment: **master**
 * Choose your default editor: ***[Select your preferred IDE, select none if not listed.]***
 * Choose the type of app that you're building: **javascript**
 * Please tell us about your project
   * What javascript framework are you using: **none**
-  * Source Directory Path: **app**      << **Note:** *This is not the default option, needs to be updated*
+  * Source Directory Path: **src**
   * Distribution Directory Path: **dist**  
   * Build Command:  **npm run-script build**
   * Start Command: **npm run-script start**
