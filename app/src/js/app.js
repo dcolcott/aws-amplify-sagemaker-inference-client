@@ -4,7 +4,7 @@ import Amplify from '@aws-amplify/core';
 import API from '@aws-amplify/api';
 import awsconfig from '../../aws-exports';
 
-// Configure AWS Amplify using defibe confg file.
+// Configure AWS Amplify using defined confg file.
 Amplify.configure(awsconfig);
 
 // AWS Amplify Parameters.
@@ -42,7 +42,7 @@ butAClassInput.addEventListener('click', addClassInput, false);
 let butRemoveClassInput = document.getElementById("remove-class-input");
 butRemoveClassInput.addEventListener('click', removeClassInput, false);
 
-// Var to save submitted inferencve image before scaling and processing.
+// Var to save submitted inference image before scaling and processing.
 let originalImage = new Image();
 
 let predictions = [];
@@ -281,7 +281,7 @@ function removeClassInput() {
 //===============================================
 // Helper classes
 
-// Take a predictuion array in order: [label Index, confidence, xmin, ymin, xmax, ymax]
+// Take a prediction array in order: [label Index, confidence, xmin, ymin, xmax, ymax]
 // and return human readable response
 function getPredictionHtmlPrettyPrint() {
 
