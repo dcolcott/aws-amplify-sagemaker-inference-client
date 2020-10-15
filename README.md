@@ -6,9 +6,9 @@ A hosted instance of this application stack can be seen at: [aws-inference-clien
 
 Amazon SageMaker is a fully managed service that removes the heavy lifting from each step of the machine learning process to make it easier to develop and train high quality machine learning models. This is especially attractive to developers that want to incorporate machine learning outcomes onto their applications without having to build and managed every step of the process.
 
-Once trained, the machine learning model needs to be hosted and exposed in a way that makes it accessible to client applications and M2M services. A common way to do this is via an Amazon Sagemaker Endpoint which is a service optimised to hosts machine learning models and presents an authenticated public interface that can be consumed by end user applications.
+Once trained, the machine learning model needs to be hosted and exposed in a way that makes it accessible to client applications. A common way to do this is via an Amazon Sagemaker Endpoint which is a service optimised to hosts machine learning models and presents an authenticated public interface that can be consumed by end user applications.
 
-The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a backend NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon Sagemaker Endpoint as displayed above.
+The application code presented in this repository consists of a native JavaScript (Bootstrap4) web client and a NodeJS AWS Lambda and Amazon API Gateway configuration. This provides an end to end example of how to perform an object detection inference against an Amazon Sagemaker Endpoint. The web client in this example overlays visual bounding boxes and text output of a user provided image submitted against the Amazon Sagemaker Endpoint as displayed above.
 
 You are free to deploy in any AWS region supporting all of the listed services but when first creating the hosting resources it can take a few of hours for DNS to propagate and your application to become available if not deployed in **US-EAST-1**. For this reason, we will deploy in **US-EAST-1** and encourage you to do the same.
 
@@ -19,13 +19,13 @@ In addition to the application stack, AWS Amplify is used to manage a highly opi
 The application architecture is shown in the following diagram:
 ![Application Stack Architecture](images/architecture.png)
 
-While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application tends to be motivating and encourages the developer to press on with the work of experimenting with machine learning model development.
+While provided as a code example, this application has also proven to be a useful tool to quickly visualize and validate when developing and optimising Amazon Sagemaker object detection models. Being able to see the result of your object detection model in a simulation of a real client application encourages the developer to press on with the work of experimenting with machine learning model development.
 
 ## AWS Lambda role-based permissions.
 Amazon Sagemaker Endpoints present an authenticated interface to the Internet so it’s reasonable to ask why we need to route the inference request via the Amazon API Gateway and the AWS Lambda. The reason in this example is so we can use AWS IAM role-based permissions to allow the Lambda to invoke the Sagemaker Endpoint without the need for the end-user to authenticate themselves in the web client. In this case, an unauthenticated request is received by the Lambda which by virtue of the sagemaker:invokeEndpoint role-based permission is able to forward the request to the Sagemaker Endpoint. This architecture should be considered in secure environments. 
 
-## AWS Command Line Interface
-The remaining sections will deploy the resources and architecture to host a Amazon Sagemaker Endpoint and the Inference Client Application using the AWS Command Line Interface. If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use in during the process.
+## AWS Command Line Interface (CLI)
+The remaining sections will deploy the resources and architecture to host an Amazon Sagemaker Endpoint and the Inference Client Application using the AWS CLI. If not already configured, you will need to create the AWS CLI credentials and configuration file to allow CLI and programmatic access. Follow the procedure [here](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html) if required. Be sure to specify the region you intend to use during the process.
 
 ## Hosting an Object Detection Model Endpoint
 
@@ -40,7 +40,7 @@ This is a custom MXnet model built for this purpose that has been trained on a r
 In Amazon Sagemaker a Model object consists of the ML model itself and a container with the logic required to perform the inference. You are welcome to use your own custom containers but for convenience AWS also provide these for each of the supported ML frameworks. 
 
 #### Save ML object detection model to S3  
-Download the object-detection ML model provided above (or have your own available) and upload to S3 in the AWS region you intended todeploy the inference client application.
+Download the object-detection ML model provided above (or have your own available) and upload to S3 in the AWS region you intended to deploy the inference client application.
 
 Follow this guide on how to [Create and Amazon S3 bucket](https://docs.aws.amazon.com/AmazonS3/latest/user-guide/create-configure-bucket.html) if you don't already have one in the specific AWS region.
 
@@ -90,9 +90,9 @@ aws sagemaker create-model \
 You can now go to the Amazon Sagemaker console and see the Amazon Sagemaker Model has been created.
 
 ### Deploy an Amazon Sagemaker Endpoint  
-To create the Amazon Sagemaker Endpoint you first need to create the Endpoint configuration.
+To create the Amazon Sagemaker Endpoint, you first need to create the Endpoint configuration.
 
-#### Create the  Amazon Sagemaker Endpoint Config  
+#### Create the Amazon Sagemaker Endpoint Config  
  Execute the below to create the Amazon Sagemaker Endpoint Config. Verify in the Amazon Sagemaker console that the configuration was successfully deployed.
 
 ```
@@ -121,7 +121,7 @@ aws sagemaker create-endpoint \
 --endpoint-config-name $EPC_NAME
 ```
 
-The Amazon Sagemaker Endpoint will now be deployed, this can take a number of minutes to complete. Look in the Amazon Sagemaker console and verify the Endpoint is being initialised. 
+The Amazon Sagemaker Endpoint will now be deployed, this can take a number of minutes to complete. Look in the Amazon Sagemaker console and verify the Endpoint is being initialized. 
 
 ## Deploying the Inference Client Application.
 Deploying the application stack described using AWS Amplify is just a few simple commands but does assume you have access to an AWS environment. 
@@ -135,8 +135,8 @@ The following procedure assumes you are on a supported Linux or MacOS device and
 
 **1. Clone the Amazon Sagemaker Inference Client Application GIT repository and 'cd' into the directory:**  
 ```
-git clone git@github.com:dcolcott/aws-amplify-sagemaker-inference-client.git`
-cd aws-amplify-sagemaker-inference-client
+git clone https://github.com/aws-samples/amazon-sagemaker-inference-client.git`
+cd amazon-sagemaker-inference-client
 ```
 
 **2. Install the application dependencies and build the project:**  
@@ -275,3 +275,4 @@ We selected an image consisting of a busy traffic scene that was found on the In
 ![Application Example Use Screen Shot](images/app-car-inference-screenshot.png)
 
 As you can see, the client application was able to process the Image and update the response of the Amazon SageMaker Endpoint inference. 
+
