@@ -272,7 +272,7 @@ On completion of the above sections, the web client will be hosted at an Amazon 
 
 We selected an image consisting of a busy traffic scene that was found on the Internet (and not in the training image dataset) and got the below result:
 
-![Application Example Use Screen Shot](images/app-car-inference-screenshot.png)
+![Application Example Use Screen Shot](images/app-car-inference-client.png)
 
 As you can see, the client application was able to process the Image and update the response of the Amazon SageMaker Endpoint inference. 
 
